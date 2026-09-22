@@ -6,7 +6,7 @@
 <title>Wyścig Stolic — Europa</title>
 <meta name="theme-color" content="#07111f">
 <meta name="description" content="Wyścig Stolic — edukacyjna gra o stolicach Europy z animowaną podróżą samochodem.">
-<meta name="capital-rush-version" content="1.2.0">
+<meta name="capital-rush-version" content="1.2.1">
 <!-- Wklej URL backendu rankingu (np. Cloudflare Worker), aby włączyć GLOBALNY Hall of Fame. Puste = localStorage. -->
 <meta name="capital-rush-leaderboard-api" content="">
 <meta name="mobile-web-app-capable" content="yes">
@@ -21,6 +21,7 @@
   --bg:#07111f;--panel:#0b1726;--panel2:#11243a;--panel3:#172d46;
   --text:#edf5ff;--muted:#91a6bd;--accent:#64e6d0;--accent2:#67a8ff;
   --gold:#ffd166;--bad:#ff6b6b;--good:#34d399;--line:#263d56;
+  --system-nav-guard:0px;
 }
 *{box-sizing:border-box}
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--text)}
@@ -78,7 +79,7 @@ button{touch-action:manipulation}
 #arrivalName strong{display:block;font-size:30px;margin-top:4px}
 
 .sidebar{min-width:0;min-height:0;overflow-x:hidden;background:linear-gradient(180deg,#0c1929 0%,#07111f 100%);border-left:1px solid rgba(255,255,255,.08);box-shadow:-14px 0 38px rgba(0,0,0,.18);padding:20px;display:flex;flex-direction:column;overflow:auto;z-index:20}
-#app[data-layout="bottom"] .sidebar{border-left:0;border-top:1px solid rgba(255,255,255,.1);box-shadow:0 -14px 38px rgba(0,0,0,.22);padding:14px 18px max(16px,env(safe-area-inset-bottom));overflow-x:hidden;overflow-y:auto}
+#app[data-layout="bottom"] .sidebar{border-left:0;border-top:1px solid rgba(255,255,255,.1);box-shadow:0 -14px 38px rgba(0,0,0,.22);padding:14px 18px calc(16px + max(env(safe-area-inset-bottom,0px),var(--system-nav-guard)));overflow-x:hidden;overflow-y:auto;scroll-padding-bottom:calc(24px + max(env(safe-area-inset-bottom,0px),var(--system-nav-guard)));overscroll-behavior:contain}
 .brandRow{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px}
 .brand strong{display:block;font-size:21px;letter-spacing:.075em;line-height:1}.brand small{display:block;color:var(--accent);font-weight:850;margin-top:6px;font-size:11px;letter-spacing:.04em}
 .modeBadge{flex:0 0 auto;padding:7px 9px;background:#132a40;border:1px solid #28445f;border-radius:10px;color:#bdd2e8;font-size:10px;font-weight:800;text-align:right}
@@ -142,8 +143,8 @@ h1{font-size:40px;margin:3px 0 0;letter-spacing:.07em}.sub{color:var(--muted);ma
 
 @media(max-width:650px){
   /* Pionowy telefon: mapa u góry, pełnoszerokie GUI pod spodem. Bez dwukolumnowej siatki. */
-  #app[data-layout="bottom"]{grid-template-rows:minmax(0,54fr) minmax(0,46fr)}
-  #app[data-layout="bottom"] .sidebar{padding:10px 12px max(12px,env(safe-area-inset-bottom));overflow-x:hidden;overflow-y:auto}
+  #app[data-layout="bottom"]{grid-template-rows:minmax(0,46fr) minmax(0,54fr)}
+  #app[data-layout="bottom"] .sidebar{padding:10px 12px calc(14px + max(env(safe-area-inset-bottom,0px),var(--system-nav-guard)));overflow-x:hidden;overflow-y:auto;scroll-padding-bottom:calc(24px + max(env(safe-area-inset-bottom,0px),var(--system-nav-guard)));overscroll-behavior:contain}
   #app[data-layout="bottom"] .brandRow{padding-right:0;margin-bottom:7px;align-items:center}
   #app[data-layout="bottom"] .brand strong{font-size:16px;letter-spacing:.055em}
   #app[data-layout="bottom"] .brand small{font-size:9px;margin-top:3px}
@@ -171,7 +172,7 @@ h1{font-size:40px;margin:3px 0 0;letter-spacing:.07em}.sub{color:var(--muted);ma
   .startBox{padding:22px 16px}.modeGrid{grid-template-columns:1fr}h1{font-size:32px}.logoCar{height:64px}.startCarSvg{width:42px;height:64px}
 }
 @media(max-width:430px){
-  #app[data-layout="bottom"]{grid-template-rows:minmax(0,50fr) minmax(0,50fr)}
+  #app[data-layout="bottom"]{grid-template-rows:minmax(0,40fr) minmax(0,60fr)}
   #app[data-layout="bottom"] .actions{flex-direction:column}
   #app[data-layout="bottom"] .brand small{display:none}
   #app[data-layout="bottom"] .question{font-size:18px}
@@ -184,6 +185,7 @@ h1{font-size:40px;margin:3px 0 0;letter-spacing:.07em}.sub{color:var(--muted);ma
 #app[data-layout="bottom"] .journey{height:auto!important;flex:none!important}
 #app[data-layout="bottom"] .questionBlock{overflow:visible}
 #app[data-layout="bottom"] .choiceGrid,#app[data-layout="bottom"] .actions,#app[data-layout="bottom"] #answerArea{width:100%;max-width:100%;min-width:0}
+#app[data-layout="bottom"] .gamePanel::after{content:"";display:block;flex:0 0 max(12px,var(--system-nav-guard));height:max(12px,var(--system-nav-guard));pointer-events:none}
 </style>
 </head>
 <body>
@@ -280,7 +282,7 @@ h1{font-size:40px;margin:3px 0 0;letter-spacing:.07em}.sub{color:var(--muted);ma
       <button class="btn secondary" id="hallBtn" type="button">🏆 HALL OF FAME</button>
       <button class="btn secondary installBtn" id="installBtn" type="button">⬇ ZAINSTALUJ APLIKACJĘ</button>
     </div>
-    <div class="startNote">Mapa bez nazw miejscowości • dane OpenStreetMap • animowana trasa podróży • v1.2.0</div>
+    <div class="startNote">Mapa bez nazw miejscowości • dane OpenStreetMap • animowana trasa podróży • v1.2.1</div>
     <div class="pwaHint" id="pwaHint">Wyniki są zapisywane lokalnie w tej przeglądarce.</div>
   </div>
 </div>
@@ -366,6 +368,28 @@ let visited=new Set(),score=0,mode=4,timer=null,startTime=0;
 let routeCoords=[],routeAnim=null,phase='idle',answerLocked=false;
 let travelProgress=0,fastStartTime=0,fastStartProgress=0;
 let targetIsTransfer=false,mapReady=false,routeRequestId=0;
+
+/*
+ * Android z klasycznym paskiem nawigacji potrafi pozostawić część dolnej krawędzi
+ * poza użytecznym obszarem PWA. safe-area-inset-bottom bywa tam równe 0, więc
+ * dla dotykowych urządzeń z Androidem dodajemy niewielki bufor. Jest on częścią
+ * przewijanego panelu — nie zabiera miejsca mapie na desktopie.
+ */
+function updateSystemInsets(){
+  const isAndroid=/Android/i.test(navigator.userAgent);
+  const coarse=matchMedia('(pointer:coarse)').matches;
+  let guard=isAndroid&&coarse?56:0;
+  if(window.visualViewport){
+    const vv=window.visualViewport;
+    const covered=Math.max(0,Math.round(window.innerHeight-(vv.height+vv.offsetTop)));
+    guard=Math.max(guard,covered);
+  }
+  document.documentElement.style.setProperty('--system-nav-guard',guard+'px');
+}
+updateSystemInsets();
+window.addEventListener('resize',updateSystemInsets,{passive:true});
+window.visualViewport?.addEventListener('resize',updateSystemInsets,{passive:true});
+window.visualViewport?.addEventListener('scroll',updateSystemInsets,{passive:true});
 
 function updateLayout(){
   const ratio=window.innerWidth/Math.max(1,window.innerHeight);
@@ -697,7 +721,7 @@ function setupPwa(){
   window.addEventListener('appinstalled',()=>{deferredInstallPrompt=null;installBtn.classList.remove('ready');hint.innerHTML='<strong>ZAINSTALOWANO</strong> // aplikacja jest dostępna z systemu';});
   installBtn.onclick=async()=>{if(!deferredInstallPrompt)return;deferredInstallPrompt.prompt();try{await deferredInstallPrompt.userChoice}catch(e){}deferredInstallPrompt=null;installBtn.classList.remove('ready')};
   if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){
-    navigator.serviceWorker.register('./sw.js?v=1.2.0').catch(e=>console.warn('Service Worker:',e));
+    navigator.serviceWorker.register('./sw.js?v=1.2.1',{updateViaCache:'none'}).then(reg=>reg.update()).catch(e=>console.warn('Service Worker:',e));
   }else if(location.protocol==='file:'){
     hint.textContent='Tryb pliku lokalnego: gra działa, ale instalacja PWA wymaga HTTPS (np. GitHub Pages).';
   }
