@@ -34,3 +34,10 @@ Jeśli skonfigurujesz URL API w:
 ranking staje się globalny. Gdy serwer jest chwilowo niedostępny, wynik zostaje zachowany lokalnie.
 
 Instrukcja backendu: `leaderboard-worker/README.md`.
+
+
+## Wersja 1.2.0 — poprawka portrait
+
+Układ `bottom` jest zawsze jednokolumnowy. Dzięki temu panel pytania nie może wypchnąć interfejsu poza ekran na telefonach o nietypowej gęstości pikseli lub szerokości CSS. Service Worker ma nową wersję cache i pobiera dokument nawigacyjny z `cache: no-store`.
+
+Jeśli po wdrożeniu nadal widać starą wersję, otwórz `capital-rush.html?v=1.2.0` albo usuń dane witryny/PWA i uruchom stronę ponownie. Numer wersji `v1.2.0` jest widoczny na ekranie startowym.
