@@ -1,92 +1,68 @@
 # Publikacja na GitHub Pages
 
-Zakładana lokalizacja repozytorium:
+Aktualny publiczny adres gry:
 
 ```text
-/work/projects/github.com/mikoreg/sandbox
+https://mikoreg.github.io/pages/capital-rush/capital-rush.html
 ```
 
-Aplikacja znajduje się w:
+To sugeruje repozytorium `mikoreg/pages` oraz katalog `capital-rush`.
+
+## 1. Skopiuj pliki frontendu
+
+Jeśli lokalny checkout repozytorium ma katalog `capital-rush`, rozpakuj do niego pliki z głównego poziomu ZIP-a. Folder `leaderboard-worker` jest backendem i nie musi być publikowany przez Pages.
+
+Przykład:
+
+```bash
+cd /work/projects/github.com/mikoreg/pages
+cp capital-rush/capital-rush.html capital-rush/capital-rush.html.bak
+unzip -o ~/Downloads/capital-rush-pwa-v2.zip -d /tmp/capital-rush-release
+cp -a /tmp/capital-rush-release/. capital-rush/
+```
+
+Jeśli nadal rozwijasz grę w starym checkoutcie:
 
 ```text
 /work/projects/github.com/mikoreg/sandbox/capitalRush
 ```
 
-## 1. Wgraj pliki
+możesz najpierw przetestować tam pliki, a potem skopiować frontend do repozytorium `pages`.
 
-Rozpakuj zawartość paczki bezpośrednio do katalogu `capitalRush`, zastępując dotychczasowy `capital-rush.html` nową wersją.
-
-Przykład:
+## 2. Test lokalny
 
 ```bash
-cd /work/projects/github.com/mikoreg/sandbox
-cp capitalRush/capital-rush.html capitalRush/capital-rush.html.bak
-unzip -o ~/Downloads/capital-rush-pwa.zip -d capitalRush
-```
-
-Jeżeli ZIP pobrał się do innego katalogu, zmień ścieżkę do pliku.
-
-## 2. Przetestuj lokalnie przez HTTP
-
-PWA i service worker nie działają poprawnie z `file://`. Uruchom prosty serwer:
-
-```bash
-cd /work/projects/github.com/mikoreg/sandbox
+cd /work/projects/github.com/mikoreg/pages
 python3 -m http.server 8080
 ```
 
 Otwórz:
 
 ```text
-http://localhost:8080/capitalRush/
+http://localhost:8080/capital-rush/
 ```
-
-Sama gra może działać również jako zwykły plik HTML, ale możliwość instalacji PWA wymaga HTTPS albo `localhost`.
 
 ## 3. Commit i push
 
 ```bash
-cd /work/projects/github.com/mikoreg/sandbox
-
 git status
-git add capitalRush
-git commit -m "Add Capital Rush PWA with local Hall of Fame"
+git add capital-rush
+git commit -m "Update Capital Rush PWA and responsive layout"
 git push
 ```
 
-Jeśli pracujesz na innej gałęzi niż domyślna, wypchnij właściwą gałąź.
+## 4. GitHub Pages
 
-## 4. Włącz GitHub Pages
+Jeżeli adres `https://mikoreg.github.io/pages/...` już działa, Pages jest już skonfigurowane. Po pushu poczekaj na nowe wdrożenie i odśwież stronę. Przy zmianie Service Workera czasem pomaga twarde odświeżenie lub ponowne otwarcie aplikacji.
 
-W repozytorium `mikoreg/sandbox` na GitHub:
+## 5. Globalny Hall of Fame
 
-1. `Settings`
-2. `Pages`
-3. w `Build and deployment` wybierz `Deploy from a branch`
-4. wybierz gałąź, na której są pliki (zwykle `main`)
-5. wybierz folder `/(root)`
-6. `Save`
+GitHub Pages jest hostingiem statycznym i nie zapisuje danych użytkowników do plików repozytorium. Do wspólnego rankingu użyj opcjonalnego backendu `leaderboard-worker/`.
 
-GitHub Pages publikuje tylko katalog główny gałęzi albo `/docs`, dlatego przy obecnej strukturze publikujemy root repozytorium, a gra pozostaje w podkatalogu `capitalRush`.
+Po wdrożeniu Workera wpisz jego URL w `capital-rush.html`:
 
-Przy standardowym adresie GitHub Pages aplikacja będzie dostępna pod adresem zbliżonym do:
-
-```text
-https://mikoreg.github.io/sandbox/capitalRush/
+```html
+<meta name="capital-rush-leaderboard-api" content="https://capital-rush-leaderboard.TWOJ-SUBDOMAIN.workers.dev">
 ```
 
-## 5. Instalacja PWA w Chrome
-
-Po wejściu na opublikowaną stronę:
-
-- Chrome może pokazać ikonę instalacji w pasku adresu,
-- albo w ekranie startowym gry pojawi się `ZAINSTALUJ APLIKACJĘ`,
-- ewentualnie użyj menu Chrome → `Zainstaluj Wyścig Stolic…` / `Zainstaluj aplikację`.
-
-Po pierwszej publikacji lub zmianie service workera warto odświeżyć stronę raz jeszcze.
-
-## Hall of Fame
-
-Tabela wyników jest celowo lokalna dla przeglądarki (`localStorage`). Każdy gracz na swoim urządzeniu ma własne TOP 10. Rekord zawiera nick, liczbę punktów i czas. Punkty są głównym kryterium, a przy remisie lepszy jest krótszy czas.
-
-Globalny ranking wspólny dla wszystkich użytkowników wymagałby backendu / bazy danych i nie jest częścią tej wersji.
+i wykonaj kolejny commit/push frontendu.
