@@ -1,4 +1,4 @@
-const VERSION = 'capital-rush-v1.1.0';
+const VERSION = 'capital-rush-v1.2.0';
 const APP_CACHE = VERSION + '-app';
 const RUNTIME_CACHE = VERSION + '-runtime';
 
@@ -40,7 +40,7 @@ self.addEventListener('fetch', event => {
   // Nawigacja: sieć najpierw, a przy braku sieci ostatnia zapisana wersja aplikacji.
   if (request.mode === 'navigate') {
     event.respondWith(
-      fetch(request)
+      fetch(request, {cache:'no-store'})
         .then(response => {
           const copy = response.clone();
           caches.open(APP_CACHE).then(cache => cache.put(request, copy));
@@ -55,7 +55,7 @@ self.addEventListener('fetch', event => {
   if (url.origin === self.location.origin) {
     event.respondWith(
       caches.match(request).then(cached => {
-        const network = fetch(request).then(response => {
+        const network = fetch(request, {cache:'no-store'}).then(response => {
           if (response && response.ok) {
             const copy = response.clone();
             caches.open(APP_CACHE).then(cache => cache.put(request, copy));
