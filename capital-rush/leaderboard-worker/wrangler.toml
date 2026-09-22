@@ -1,0 +1,14 @@
+name = "capital-rush-leaderboard"
+main = "src/worker.js"
+compatibility_date = "2026-09-22"
+
+[vars]
+# Origin strony GitHub Pages. Localhost jest dopuszczany przez kod Workera do testów.
+ALLOWED_ORIGINS = "https://mikoreg.github.io"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "capital-rush-leaderboard"
+# Po `npx wrangler@latest d1 create capital-rush-leaderboard --jurisdiction=eu`
+# wklej tutaj identyfikator zwrócony przez Cloudflare.
+database_id = "PASTE_D1_DATABASE_ID_HERE"

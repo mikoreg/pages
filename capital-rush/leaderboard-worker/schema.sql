@@ -1,0 +1,11 @@
+CREATE TABLE IF NOT EXISTS scores (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  nick TEXT NOT NULL,
+  score INTEGER NOT NULL CHECK(score >= 0 AND score <= 4200),
+  seconds INTEGER NOT NULL CHECK(seconds >= 1 AND seconds <= 86400),
+  mode INTEGER NOT NULL CHECK(mode BETWEEN 1 AND 4),
+  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_scores_rank
+ON scores(score DESC, seconds ASC, id ASC);

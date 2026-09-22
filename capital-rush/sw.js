@@ -1,4 +1,4 @@
-const VERSION = 'capital-rush-v1.0.0';
+const VERSION = 'capital-rush-v1.1.0';
 const APP_CACHE = VERSION + '-app';
 const RUNTIME_CACHE = VERSION + '-runtime';
 

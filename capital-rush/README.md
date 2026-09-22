@@ -1,27 +1,36 @@
-# Wyścig Stolic — PWA
+# Wyścig Stolic — PWA 1.1
 
-Statyczna aplikacja PWA. Nie wymaga backendu. Mapa i routing wymagają połączenia z Internetem.
+Gra PWA o stolicach Europy. Frontend jest statyczny i nadaje się do GitHub Pages. Mapa i routing wymagają Internetu.
 
-## Pliki
+## Co zawiera wersja 1.1
 
-- `capital-rush.html` — właściwa gra
-- `index.html` — wejście dla GitHub Pages; przekierowuje do gry
-- `manifest.webmanifest` — manifest PWA
-- `sw.js` — service worker / cache aplikacji
-- `icon.svg`, `icons/*` — ikony PWA
-- `.nojekyll` — wyłącza przetwarzanie Jekyll dla tego katalogu
+- responsywny layout: panel boczny na ekranie poziomym, pełnoszeroki panel pod mapą w pionie,
+- poprawka układu portrait — elementy nie są już wypychane przez dwukolumnowy grid,
+- instalacja jako PWA w Chrome,
+- samochód jako inline SVG,
+- Hall of Fame z nickiem, punktami i czasem,
+- lokalny ranking jako fallback,
+- opcjonalny **globalny Hall of Fame** przez `leaderboard-worker/` (Cloudflare Worker + D1).
+
+## Pliki frontendu
+
+- `capital-rush.html` — gra,
+- `index.html` — wejście dla GitHub Pages,
+- `manifest.webmanifest` — manifest PWA,
+- `sw.js` — service worker / cache,
+- `icon.svg`, `icons/*` — ikony,
+- `.nojekyll` — wyłącza Jekyll.
 
 ## Hall of Fame
 
-Po ukończeniu gry aplikacja prosi o nick. Wynik jest zapisywany lokalnie w `localStorage` przeglądarki. Tabela TOP 10 jest sortowana:
+Bez backendu wyniki są przechowywane w `localStorage` przeglądarki. Rekord zawiera nick, punkty i czas, a TOP 10 sortuje się po punktach malejąco i po czasie rosnąco.
 
-1. większa liczba punktów,
-2. przy remisie krótszy czas.
+Jeśli skonfigurujesz URL API w:
 
-Wyniki nie są wysyłane na serwer i nie synchronizują się pomiędzy urządzeniami ani różnymi domenami.
+```html
+<meta name="capital-rush-leaderboard-api" content="https://...workers.dev">
+```
 
-## PWA
+ranking staje się globalny. Gdy serwer jest chwilowo niedostępny, wynik zostaje zachowany lokalnie.
 
-Po opublikowaniu pod HTTPS (np. GitHub Pages) Chrome może zaoferować instalację aplikacji. W samej grze pojawi się przycisk `ZAINSTALUJ APLIKACJĘ`, gdy przeglądarka zgłosi możliwość instalacji.
-
-Mapa OpenFreeMap/OpenStreetMap oraz routing OSRM pozostają zasobami sieciowymi. Service worker cache'uje aplikację i bibliotekę MapLibre po pierwszym uruchomieniu, ale nie pobiera całej mapy do pracy offline.
+Instrukcja backendu: `leaderboard-worker/README.md`.
